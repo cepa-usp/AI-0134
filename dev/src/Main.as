@@ -1,6 +1,7 @@
 package 
 {	
 	import cepa.ai.AI;
+	import cepa.ai.AIConstants;
 	import cepa.ai.AIInstance;
 	import cepa.ai.AIObserver;
 	import cepa.ai.IPlayInstance;
@@ -43,8 +44,10 @@ package
 		
 		private function addLayers():void {
 			lyrMenu.addChild(menuBar);
+			menuBar.y = 479;
+			menuBar.x = scrollRect.width/2
 			
-			addChild(lyrMenu);
+			ai.container.addChild(lyrMenu);
 			
 		}
 		
@@ -54,6 +57,9 @@ package
 			eval = new ProgressiveEvaluator(ai);
 			statsScreen = new StatsScreen(eval, ai);
 			ai.evaluator = eval;
+			ai.container.setAboutScreen(new AboutScreen134());
+			ai.container.setInfoScreen(new InfoScreen134());
+			ai.addObserver(this);
 			ai.container.optionButtons.y = 10;
 			ai.container.setMessageTextVisible(false);
 			
@@ -84,7 +90,7 @@ package
 		
 		public function onStatsClick():void 
 		{
-			
+			statsScreen.openStatScreen();
 		}
 		
 		public function onTutorialClick():void 
@@ -123,12 +129,14 @@ package
 		{			
 			removeEventListener(Event.ADDED_TO_STAGE, init);
 			// entry point
-			addLayers();
+			scrollRect = new Rectangle(0, 0, 700, 500);
+			
 			createAI();
+			addLayers();
 			
-			scrollRect = new Rectangle(0, 0, 640, 480);
 			
-			addChild(screen);
+			
+			ai.container.addChild(screen);
 			screen.y = -20;
 			screen.camera.target = null;
 			screen.startRendering();	
@@ -139,7 +147,9 @@ package
 			timerToStart.addEventListener(TimerEvent.TIMER_COMPLETE, startAI, false, 0, true);
 			timerToStart.start();
 			
-			if (ExternalInterface.available) initLMSConnection();
+			//getNewExercise(null);
+			resetMenu();
+			
 		}
 		
 		/**
@@ -147,10 +157,11 @@ package
 		 */
 		private function lockButtons():void
 		{
-
+			if (eval.currentPlayMode == AIConstants.PLAYMODE_EVALUATE) {
+				ai.container.disableComponent(menuBar.btValendo);				
+			}
 			rotLeft.flecha.mouseEnabled = false;
 			rotRight.flecha.mouseEnabled = false;
-			//screen.rotationEnabled = false;
 			menuBar.btAvaliar.mouseEnabled = false;
 		}
 		
@@ -188,14 +199,15 @@ package
 			menuBar.btNovamente.addEventListener(MouseEvent.CLICK, getNewExercise);
 			menuBar.btAvaliar.addEventListener(MouseEvent.CLICK, aval);
 			menuBar.btVerResposta.addEventListener(MouseEvent.CLICK, showHideAnswer);
+			menuBar.btValendo.addEventListener(MouseEvent.CLICK, onValendoClick);
 			
 			
 				rotLeft = new RotLeft();
 				rotLeft.x = 3;
-				rotLeft.y = 350;
+				rotLeft.y = 370;
 				rotRight = new RotRight();
-				rotRight.x = 637;
-				rotRight.y = 350;
+				rotRight.x = scrollRect.width;
+				rotRight.y = 370;
 				lyrMenu.addChild(rotLeft);
 				lyrMenu.addChild(rotRight);
 				
@@ -203,10 +215,16 @@ package
 				rotRight.flecha.addEventListener(MouseEvent.MOUSE_DOWN, initRotation);
 			
 				setButtonMode(menuBar.btAvaliar);
-				setButtonMode(menuBar.btn_upDown);
+				setButtonMode(menuBar.btValendo);
+				//setButtonMode(menuBar.btn_upDown);
 				setButtonMode(menuBar.btNovamente);
 				setButtonMode(menuBar.btVerResposta);
 				
+		}
+		
+		private function onValendoClick(e:MouseEvent):void 
+		{
+			ProgressiveEvaluator(ai.evaluator).askEvaluation(menuBar.btValendo, onEvalResponse);
 		}
 		
 		public function setButtonMode(bt:MovieClip):void {
@@ -216,6 +234,12 @@ package
 			bt.buttonMode = true;
 		}		
 		
+		public function onEvalResponse():void {
+			trace("entrou callback", ProgressiveEvaluator(ai.evaluator).currentPlayMode)
+			if (ProgressiveEvaluator(ai.evaluator).currentPlayMode == AIConstants.PLAYMODE_EVALUATE) {
+				onResetClick();
+			}
+		}
 		
 		
 		private var flechaRotacional:MovieClip;
@@ -250,14 +274,27 @@ package
 			flechaRotacional = null;
 		}
 		
+		
+		private function showAvalButtons():void {
+			menuBar.btNovamente.visible = true;
+			menuBar.btVerResposta.visible = true;
+			menuBar.btVerResposta.verexerc.visible = false;
+			menuBar.btAvaliar.visible = false;
+		}
+		
 		/**
 		 * Faz a avaliação da atividade
 		 */
 		private function aval(e:MouseEvent):void 
 		{
+			
 			lockButtons();
+			showAvalButtons();
+			var play:PlayInstance134 = new PlayInstance134();
+			
 			//afterAvalClick();
 			var currentScore:Number = screen.selectedInstance.getAnswer();
+			play.setScore(currentScore / 100);
 			
 			var formatoErrado:TextFormat = new TextFormat();
 			formatoErrado.color = 0xE67300;
@@ -282,17 +319,7 @@ package
 				resultScreen.texto.text = "Clique \"Novo exercício\" para iniciar um novo exercício";
 			}
 			
-			if (!completed) {
-				score = currentScore;
-				completed = true;
-				commit();
-			}else{
-				if (currentScore > score) {
-					score = currentScore;
-					completed = true;
-					commit();
-				}
-			}
+			eval.addPlayInstance(play);
 		}
 		
 		/**
@@ -334,10 +361,25 @@ package
 		}
 		
 		private function getNewExercise(e:MouseEvent):void {
-			//resetMenu();
+			resetMenu();
 			lockButtons();
+
 			screen.rotationEnabled = false;
 			screen.getNewInstance();
+		}
+		
+		private function resetMenu():void 
+		{
+			//menuBar.btVerResposta.verresp.visible = false;			
+			menuBar.btVerResposta.visible = false;
+			//menuBar.btAvaliar.x = 370;
+			menuBar.btNovamente.visible = false;
+			//menuBar.btVerResposta.verexerc.visible = false;
+			
+			menuBar.btAvaliar.mouseEnabled = true;
+			
+			menuBar.btAvaliar.visible = true;
+
 		}
 		
 		

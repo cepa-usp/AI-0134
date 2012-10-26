@@ -45,7 +45,7 @@ package
 		
 		public function Screen() 
 		{
-			super(640, 480, false, false, CameraType.FREE);
+			super(700, 500, false, false, CameraType.FREE);
 			
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);

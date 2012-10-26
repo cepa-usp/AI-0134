@@ -33,12 +33,18 @@ package
 		{
 			var o:Object = new Object();
 			o.playMode = this.playMode;
+			o.score = this.score;
 			return o;
 		}
 		
 		public function bind(obj:Object):void 
 		{
 				this.playMode = obj.playMode;
+				this.score = obj.score;
+		}
+		
+		public function setScore(value:Number):void {
+			score = value;
 		}
 		
 		public function getScore():Number 

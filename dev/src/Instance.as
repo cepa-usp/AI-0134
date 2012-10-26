@@ -71,8 +71,8 @@ package
 			for (var i:int = -500; i < 500; i += 58)
 			{
 				//var line:Line3D = new Line3D(lines, new LineMaterial(0x000000, 1), 2, new Vertex3D(0, 0, -500), new Vertex3D(0, 0, 500));
-				var line:Line3D = new Line3D(lines, new LineMaterial(0x000000, 1), 2, new Vertex3D(0, 0, i), new Vertex3D(0, 0, i + 30));
-				var line2:Line3D = new Line3D(lines, new LineMaterial(0x000000, 1), 2, new Vertex3D(0, 0, i + 30 + 13), new Vertex3D(0, 0, i + 30 + 13 + 2));
+				var line:Line3D = new Line3D(lines, new LineMaterial(0xefefef, 1), 2, new Vertex3D(0, 0, i), new Vertex3D(0, 0, i + 30));
+				var line2:Line3D = new Line3D(lines, new LineMaterial(0xefefef, 1), 2, new Vertex3D(0, 0, i + 30 + 13), new Vertex3D(0, 0, i + 30 + 13 + 2));
 				lines.addLine(line);
 				lines.addLine(line2);
 			}

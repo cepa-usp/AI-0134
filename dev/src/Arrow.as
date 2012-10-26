@@ -13,7 +13,7 @@ package
 		private var seta1:Cylinder;
 		private var ponta:Cylinder;
 		private var _orientation:int = 0;
-		public function Arrow(color:uint = 0x0000FF) 
+		public function Arrow(color:uint = 0x0683FF) 
 		{
 			seta1 = new Cylinder(new ColorMaterial(color, 1), 4, 300, 6, 4);
 			addChild(seta1)
