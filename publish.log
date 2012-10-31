@@ -1,0 +1,24 @@
+Copying from /home/arthur/host/CEPA/github/AI-0134 to cepa@arquivos.atp.usp.br:/work/PUBLICACAO/atividades-interativas/AI-0134
+building file list ... done
+created directory /work/PUBLICACAO/atividades-interativas/AI-0134
+./
+AI-0134_PIF.zip
+imsmanifest.xml
+index.html
+js/
+js/ai.js
+js/jquery-1.4.2.min.js
+js/scorm_wrapper.min.js
+js/swfobject.js
+models/
+models/soma.DAE
+models/subtra.DAE
+models/textura_soma.jpg
+models/textura_sub.jpg
+swf/
+swf/AI-0134.swf
+swf/AI_Loader.swf
+swf/expressInstall.swf
+
+sent 2264900 bytes  received 290 bytes  4530380.00 bytes/sec
+total size is 2263652  speedup is 1.00
