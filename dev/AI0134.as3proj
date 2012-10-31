@@ -4,7 +4,7 @@
   <output>
     <movie outputType="Application" />
     <movie input="" />
-    <movie path="bin\AI0134.swf" />
+    <movie path="bin\AI-0134.swf" />
     <movie fps="30" />
     <movie width="700" />
     <movie height="500" />
@@ -94,5 +94,4 @@
   </options>
   <!-- Plugin storage -->
   <storage />
-
 </project>

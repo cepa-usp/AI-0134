@@ -43,6 +43,8 @@ package
 		
 		
 		private function addLayers():void {
+
+			
 			lyrMenu.addChild(menuBar);
 			menuBar.y = 479;
 			menuBar.x = scrollRect.width/2
@@ -131,8 +133,9 @@ package
 			// entry point
 			scrollRect = new Rectangle(0, 0, 700, 500);
 			
+
 			createAI();
-			addLayers();
+			
 			
 			
 			
@@ -141,6 +144,9 @@ package
 			screen.camera.target = null;
 			screen.startRendering();	
 			screen.addEventListener(Event.COMPLETE, unlockButtons);
+			
+			
+			addLayers();
 			
 			configMenu();
 			timerToStart = new Timer(100, 1);

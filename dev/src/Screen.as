@@ -20,13 +20,16 @@ package
 	import org.papervision3d.core.math.Number3D;
 	import org.papervision3d.core.math.Sphere3D;
 	import org.papervision3d.core.proto.MaterialObject3D;
+	import org.papervision3d.events.InteractiveScene3DEvent;
 	import org.papervision3d.materials.ColorMaterial;
 	import org.papervision3d.materials.special.LineMaterial;
 	import org.papervision3d.objects.DisplayObject3D;
 	import org.papervision3d.objects.primitives.Cylinder;
 	import org.papervision3d.objects.primitives.PaperPlane;
 	import org.papervision3d.objects.primitives.Sphere;
+	import org.papervision3d.scenes.Scene3D;
 	import org.papervision3d.view.BasicView;
+	import org.papervision3d.view.layer.ViewportBaseLayer;
 	
 	
 	/**
@@ -41,7 +44,10 @@ package
 		private var amntinstances:int = 10;
 		private var sprInstances:DisplayObject3D;
 		private var oldInstance:Instance;
+		
+		
 		private var sprfocus:DisplayObject3D = new DisplayObject3D("duente");
+		
 		
 		public function Screen() 
 		{
@@ -51,17 +57,41 @@ package
 			else addEventListener(Event.ADDED_TO_STAGE, init);
 		}
 		
+		      // skybox images  
+        [Embed (source="assets/hot_nebula_0.jpg")]  
+        private var BitmapFront:Class;  
+        [Embed (source="assets/hot_nebula_270.jpg")]  
+        private var BitmapRight:Class;  
+        [Embed (source="assets/hot_nebula_180.jpg")]  
+        private var BitmapBack:Class;  
+        [Embed (source="assets/hot_nebula_90.jpg")]  
+        private var BitmapLeft:Class;  
+        [Embed (source="assets/hot_nebula_bottom.jpg")]  
+        private var BitmapDown:Class;  
+        [Embed (source="assets/hot_nebula_top.jpg")]  
+        private var BitmapUp:Class;  
+		public static const SKYSIZE:Number = Number.MAX_VALUE;  
+  
+		private var skybox:SkyBox;
+        public function loadSkyBox(scene:Scene3D):void {  
+            skybox = new SkyBox(BitmapFront, BitmapLeft, BitmapBack, BitmapUp, BitmapRight, BitmapDown, SKYSIZE, SkyBox.QUALITY_HIGH);  
+            scene.addChild(skybox);  
+			
+        }  
+		
+
+		
+
+		
 		public function init(e:Event = null):void {
+			
 			camera.target = null;
 			
 			createLayers();
 			createScenario();
+			loadSkyBox(scene);
 			scene.addChild(sprfocus);
-			
-			//var eixos:CartesianAxis3D = new CartesianAxis3D();			
-			//scene.addChild(eixos);
-			//eixos.scale = 50;
-			
+
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, initRotation);
 		}
 		
@@ -176,6 +206,7 @@ package
 
 		public function setAllInvisible():void
 		{
+			return;
 			for each (var item:Instance in instances) 
 			{
 				if (item != selectedInstance) item.visible = false;
@@ -211,15 +242,17 @@ package
 		public var rotationEnabled:Boolean = true;
 		private function initRotation(e:MouseEvent):void 
 		{
+			
 			if (!rotationEnabled) return;
-			if (e.target is Stage)
+			trace(e.target)
+			if (e.target is ViewportBaseLayer)
 			{
 				clickPoint.x = stage.mouseX;
 				clickPoint.y = stage.mouseY;
 				stage.addEventListener(Event.ENTER_FRAME, rotating);
 				stage.addEventListener(MouseEvent.MOUSE_UP, stopRotating);
 			}
-		}
+		}	
 		
 		private function rotating(e:Event):void 
 		{
