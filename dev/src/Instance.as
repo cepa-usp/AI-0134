@@ -39,8 +39,8 @@ package
 		private var _seta1Pos:int = UP;
 		private var _seta1:Arrow;
 		private var _seta2:Arrow;
-		private var setaAnswer1:Arrow;
-		private var setaAnswer2:Arrow;
+		public var setaAnswer1:Arrow;
+		public var setaAnswer2:Arrow;
 		private var cargaPos:Boolean;
 		
 		public function Instance(cargaPos:Boolean, vel:Number) 

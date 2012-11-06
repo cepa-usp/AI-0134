@@ -1,5 +1,5 @@
 package {
-	import cepa.utils.ToolTip;
+	import cepa.tooltip.ToolTip;
 	import fl.transitions.easing.None;
 	import fl.transitions.Tween;
 	import fl.transitions.TweenEvent;

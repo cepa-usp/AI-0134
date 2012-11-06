@@ -11,7 +11,7 @@ package
 	public class Arrow extends DisplayObject3D
 	{
 		private var seta1:Cylinder;
-		private var ponta:Cylinder;
+		private var _ponta:Cylinder;
 		private var _orientation:int = 0;
 		public function Arrow(color:uint = 0x0683FF) 
 		{
@@ -38,6 +38,16 @@ package
 		public function set orientation(value:int):void 
 		{
 			_orientation = value;
+		}
+		
+		public function get ponta():Cylinder 
+		{
+			return _ponta;
+		}
+		
+		public function set ponta(value:Cylinder):void 
+		{
+			_ponta = value;
 		}
 		
 	}

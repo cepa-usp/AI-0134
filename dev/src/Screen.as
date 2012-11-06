@@ -52,7 +52,6 @@ package
 		public function Screen() 
 		{
 			super(700, 500, false, false, CameraType.FREE);
-			
 			if (stage) init();
 			else addEventListener(Event.ADDED_TO_STAGE, init);
 		}

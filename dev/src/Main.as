@@ -7,15 +7,20 @@ package
 	import cepa.ai.IPlayInstance;
 	import cepa.eval.ProgressiveEvaluator;
 	import cepa.eval.StatsScreen;
+	import cepa.tutorial.CaixaTextoNova;
+	import cepa.tutorial.Tutorial;
+	import cepa.tutorial.TutorialEvent;
 	import cepa.utils.Angle;
 	import com.eclecticdesignstudio.motion.Actuate;
 	import com.eclecticdesignstudio.motion.easing.Elastic;
+	import com.eclecticdesignstudio.motion.easing.Quad;
 	import flash.display.MovieClip;
 	import flash.display.Sprite;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.events.TimerEvent;
 	import flash.external.ExternalInterface;
+	import flash.filters.GlowFilter;
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextFormat;
@@ -56,13 +61,22 @@ package
 		
 		private function createAI():void {
 			ai = new AI(this);
-			eval = new ProgressiveEvaluator(ai);
+			eval = new ProgressiveEvaluator(ai);			
 			statsScreen = new StatsScreen(eval, ai);
+			
+			eval.feedback.x = stage.stageWidth / 2
+			eval.feedback.y = stage.stageHeight/2	
+
+			statsScreen.stats.x = stage.stageWidth / 2
+			statsScreen.stats.y = stage.stageHeight/2	
+
+			
 			ai.evaluator = eval;
+			ai.container.optionButtons.addAllButtons();
 			ai.container.setAboutScreen(new AboutScreen134());
 			ai.container.setInfoScreen(new InfoScreen134());
 			ai.addObserver(this);
-			ai.container.optionButtons.y = 10;
+			ai.container.optionButtons.y = 192;
 			ai.container.setMessageTextVisible(false);
 			
 		}
@@ -97,7 +111,78 @@ package
 		
 		public function onTutorialClick():void 
 		{
+			var p1:Point = new Point(0, 0);
 			
+			var p2:Point = new Point(0, 0);
+			
+			var textos:Array = ["Pressione para ver as orientações.",
+									"A animação representa uma carga elétrica numa órbita circular.",
+									"Existe um momento angular associado a ela (flecha azul destacada)...",
+									"... bem como um momento de dipolo magnético (flecha vermelha destacada).",
+									"Seu objetivo é orientar corretamente o momento angular (arraste a flecha)...",
+									"... e o momento de dipolo magnético (arraste a flecha).",
+									"Quando tiver terminado, pressione este botão para avaliar sua resposta.",
+									"Pressione este botão para exibir/ocultar a resposta correta.",
+									"Pressione este botão para começar um exercício diferente.",
+									"Pressione este botão para que TODAS as tentativas seguintes valham nota.",
+									"Veja seu desempenho aqui."
+								]
+			
+			var t:Tutorial = new Tutorial();
+			//ai.debugTutorial = true;
+			t.addEventListener(TutorialEvent.BALAO_ABRIU, onNovoBalao);
+			
+			
+			t.adicionarBalao(textos[0], new Point(641,103), CaixaTextoNova.RIGHT, CaixaTextoNova.FIRST);
+			t.adicionarBalao(textos[1], new Point(349,369), "", "");
+			t.adicionarBalao(textos[2], new Point(133, 74), "", "");
+			
+			t.adicionarBalao(textos[3], new Point(135,79), "", "");
+			
+			t.adicionarBalao(textos[4], new Point(60,412),  CaixaTextoNova.BOTTOM, CaixaTextoNova.FIRST);
+			t.adicionarBalao(textos[5], new Point(640,412), CaixaTextoNova.BOTTOM, CaixaTextoNova.LAST);
+			t.adicionarBalao(textos[6], new Point(228,474), CaixaTextoNova.BOTTOM, CaixaTextoNova.CENTER);
+			t.adicionarBalao(textos[7], new Point(238,462), CaixaTextoNova.BOTTOM, CaixaTextoNova.CENTER);
+			t.adicionarBalao(textos[8], new Point(463,465), CaixaTextoNova.BOTTOM, CaixaTextoNova.CENTER);
+			t.adicionarBalao(textos[9], new Point(344,469), CaixaTextoNova.BOTTOM, CaixaTextoNova.CENTER);
+			t.adicionarBalao(textos[10], new Point(636, 23), CaixaTextoNova.RIGHT, CaixaTextoNova.FIRST);
+			t.iniciar(this.stage, true);
+
+		}
+		
+		private var bt1vis:Boolean = false;
+		private var bt2vis:Boolean = false;
+		
+		private function onNovoBalao(e:TutorialEvent):void 
+		{
+			trace(e.numBalao)
+			switch(e.numBalao) {
+				case 0:
+					bt1vis = menuBar.btAvaliar.visible 
+					bt2vis = menuBar.btVerResposta.visible
+					menuBar.btVerResposta.verexerc.visible = false;
+					break;
+				case 2:
+					Actuate.tween(screen.selectedInstance.seta1, 0.5, { scale:2} ).ease(Quad.easeOut);
+					Actuate.tween(screen.selectedInstance.seta2, 0.45, { scale:1 } ).ease(Quad.easeOut);					
+					break;
+				case 3:
+					Actuate.tween(screen.selectedInstance.seta1, 0.5, { scale:1 } ).ease(Quad.easeOut);
+					Actuate.tween(screen.selectedInstance.seta2, 0.45, { scale:2} ).ease(Quad.easeOut);					
+					break;
+				case 4:
+					Actuate.tween(screen.selectedInstance.seta2, 0.45, { scale:1 } ).ease(Quad.easeOut);					
+					break;
+				case 7:
+					menuBar.btAvaliar.visible = false;
+					menuBar.btVerResposta.visible = true;
+					break;
+				case 8:
+					menuBar.btAvaliar.visible = bt1vis;
+					menuBar.btVerResposta.visible = bt2vis;
+					break;
+					
+			}
 		}
 		
 		public function onScormConnected():void 
@@ -248,6 +333,14 @@ package
 		}
 		
 		
+		private function ajustaAngFlecha(angDir:Number, angEsq:Number):void {
+			Actuate.tween(rotLeft.flecha, 0.6, { rotation:angEsq } );
+			Actuate.tween(rotRight.flecha, 0.6, { rotation:angDir } );
+			//rotLeft.flecha.rotation = angEsq;
+			//rotRight.flecha.rotation = angDir;
+		}
+		
+		
 		private var flechaRotacional:MovieClip;
 		private function initRotation(e:MouseEvent):void 
 		{
@@ -283,6 +376,7 @@ package
 		
 		private function showAvalButtons():void {
 			menuBar.btNovamente.visible = true;
+			ai.container.enableComponent(menuBar.btNovamente);
 			menuBar.btVerResposta.visible = true;
 			menuBar.btVerResposta.verexerc.visible = false;
 			menuBar.btAvaliar.visible = false;
@@ -338,11 +432,13 @@ package
 				menuBar.btVerResposta.verexerc.visible = true;
 				//Mostra resposta:
 				screen.selectedInstance.showAnswer();
+				ajustaAngFlecha(screen.selectedInstance.setaAnswer1.rotationX, screen.selectedInstance.setaAnswer2.rotationX);
 			}else {
 				menuBar.btVerResposta.verresp.visible = true;
 				menuBar.btVerResposta.verexerc.visible = false;
 				//Mostra o que o aluno fez:
 				screen.selectedInstance.hideAnswer();
+				ajustaAngFlecha(screen.selectedInstance.seta2.rotationX-180, screen.selectedInstance.seta1.rotationX-180);
 			}
 		}
 		
@@ -379,7 +475,10 @@ package
 			//menuBar.btVerResposta.verresp.visible = false;			
 			menuBar.btVerResposta.visible = false;
 			//menuBar.btAvaliar.x = 370;
-			menuBar.btNovamente.visible = false;
+			//menuBar.btNovamente.mouseEnabled = true;
+			ai.container.disableComponent(menuBar.btNovamente);
+			
+			//menuBar.btNovamente.visible = false;
 			//menuBar.btVerResposta.verexerc.visible = false;
 			
 			menuBar.btAvaliar.mouseEnabled = true;
