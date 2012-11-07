@@ -123,11 +123,15 @@ package
 			if (seta1.rotationX == setaAnswer1.rotationX) {
 				score += 50;
 				ans1 = true;
+			}else {
+				ans1 = false;
 			}
 			
 			if (seta2.rotationX == setaAnswer2.rotationX) {
 				score += 50;
 				ans2 = true;
+			}else {
+				ans2 = false;
 			}
 			
 			return score;
