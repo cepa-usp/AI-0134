@@ -103,9 +103,9 @@ package
 		private var displayAnswer:Boolean = false;
 		
 		public var carga_positiva:Boolean = true;
-		public var ans1:Boolean = true;
+		public var ans1:Boolean = false;
 		public var ans1_oposto:Boolean = true;
-		public var ans2:Boolean = true;
+		public var ans2:Boolean = false;
 		public var ans2_oposto:Boolean = true;
 		
 		public function getAnswer():Number
@@ -113,14 +113,21 @@ package
 			//trace(seta1.rotationX, setaAnswer1.rotationX);
 			//trace(seta2.rotationX, setaAnswer2.rotationX);
 			var score:Number = 0;
+			carga_positiva = cargaPos;
 			trace("R1: ", seta1.rotationX, setaAnswer1.rotationX)
 			trace("R2: ", seta2.rotationX, setaAnswer2.rotationX)
+			
+			ans1_oposto = (Math.abs(seta1.rotationX - setaAnswer1.rotationX) == 180)
+			ans2_oposto = (Math.abs(seta2.rotationX - setaAnswer2.rotationX)==180)
+			
 			if (seta1.rotationX == setaAnswer1.rotationX) {
 				score += 50;
+				ans1 = true;
 			}
 			
 			if (seta2.rotationX == setaAnswer2.rotationX) {
 				score += 50;
+				ans2 = true;
 			}
 			
 			return score;
@@ -132,7 +139,7 @@ package
 			Actuate.tween(seta1, 0.5, { scale:0 }, true);
 			Actuate.tween(seta2, 0.5, { scale:0 }, true);
 			
-			Actuate.tween(setaAnswer1, 0.5, { scale:1 }, true).delay(0.3);
+			Actuate.tween(setaAnswer1, 0.5, { scale:0.9 }, true).delay(0.3);
 			Actuate.tween(setaAnswer2, 0.5, { scale:1 }, true).delay(0.3);
 		}
 		
@@ -143,7 +150,7 @@ package
 			Actuate.tween(setaAnswer2, 0.5, { scale:0 }, true);
 			
 			Actuate.tween(seta1, 0.5, { scale:1 }, true).delay(0.3);
-			Actuate.tween(seta2, 0.5, { scale:1 }, true).delay(0.3);
+			Actuate.tween(seta2, 0.5, { scale:0.95 }, true).delay(0.3);
 		}
 		
 		public function resetRotation():void

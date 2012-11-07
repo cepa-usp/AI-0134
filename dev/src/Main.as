@@ -410,12 +410,19 @@ package
 			}
 			if (screen.selectedInstance.ans1 == false) {				
 				if (screen.selectedInstance.ans2_oposto) {
-					ai.container.messageBox("O sentido do vetor momento agular está associado com o MOVIMENTO do carga pela regra da mão direita e nada tem a ver com sua carga elétrica.", null);	
+					ai.container.messageBox("O sentido do vetor momento agular está associado com o MOVIMENTO do carga pela regra da mão direita e nada tem a ver com sua carga elétrica.", aval2);	
 				} else {
-					ai.container.messageBox("O sentido do vetor momento angular é dado pela regra da mão direita. Tente novamente.", null);	
+					ai.container.messageBox("O sentido do vetor momento angular é dado pela regra da mão direita. Tente novamente.", aval2);	
 				}
 			}
-			if (screen.selectedInstance.ans2 == false) {
+			
+			
+			eval.addPlayInstance(play);
+		}
+		
+		
+		private function aval2(v:int) {
+		if (screen.selectedInstance.ans2 == false) {
 				if (screen.selectedInstance.ans2_oposto) {
 					if (!screen.selectedInstance.carga_positiva) {
 						ai.container.messageBox("Atenção para a carga elétrica: quando ela é negativa os vetores momento angular e momento de dipolo magnético são antiparalelos", null);	
@@ -429,9 +436,7 @@ package
 				// ou
 				
 			}
-
-			
-			eval.addPlayInstance(play);
+	
 		}
 		
 		/**

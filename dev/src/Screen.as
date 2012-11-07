@@ -90,7 +90,11 @@ package
 			createScenario();
 			loadSkyBox(scene);
 			scene.addChild(sprfocus);
-
+			//camera.useCulling = true;
+			//camera.near = 8
+			//camera.far = 4000;
+			//trace(camera.near, camera.far)
+			
 			stage.addEventListener(MouseEvent.MOUSE_DOWN, initRotation);
 		}
 		
