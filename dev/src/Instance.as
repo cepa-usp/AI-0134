@@ -102,12 +102,19 @@ package
 		
 		private var displayAnswer:Boolean = false;
 		
+		public var carga_positiva:Boolean = true;
+		public var ans1:Boolean = true;
+		public var ans1_oposto:Boolean = true;
+		public var ans2:Boolean = true;
+		public var ans2_oposto:Boolean = true;
+		
 		public function getAnswer():Number
 		{
 			//trace(seta1.rotationX, setaAnswer1.rotationX);
 			//trace(seta2.rotationX, setaAnswer2.rotationX);
 			var score:Number = 0;
-			
+			trace("R1: ", seta1.rotationX, setaAnswer1.rotationX)
+			trace("R2: ", seta2.rotationX, setaAnswer2.rotationX)
 			if (seta1.rotationX == setaAnswer1.rotationX) {
 				score += 50;
 			}

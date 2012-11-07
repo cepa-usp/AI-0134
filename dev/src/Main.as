@@ -94,6 +94,8 @@ package
 			getNewExercise(null);
 		}
 		
+		
+		
 		public function onScormFetch():void 
 		{
 			
@@ -403,21 +405,31 @@ package
 			formatoCerto.color = 0x008000;
 			
 			resultScreen.openScreen();
-			if (currentScore == 0)	{
-				resultScreen.result.defaultTextFormat = formatoErrado;
-				resultScreen.result.text = "A orientação dos vetores precisa de revisão.";
-				if(Math.random() > 0.5) resultScreen.texto.text = "Volte à atividade interativa e análise com calma a situação apresentada. Se você achar necessário, reveja o conceito e tente sanar suas dúvidas.";
-				else resultScreen.texto.text = "Para que a atividade interativa possa colaborar para seu aprendizado, você precisa focar sua atenção na situação apresentada. Caso queira apoie-se no texto de referência e nos questionários para reforçar seu conhecimento. Retorne à atividade interativa após isso.";
-			}else if (currentScore == 50) {
-				resultScreen.result.defaultTextFormat = formatoErrado;
-				resultScreen.result.text = "Apenas um vetor está posicionado corretamente.";
-				if(Math.random() > 0.5) resultScreen.texto.text = "Para posicionar os dois vetores você precisa lembrar que (1) o momento angular é definido pela regra da mão direita, (2) que os dois vetores são paralelos e (3) que o sentido deles é igual se a carga for positiva, e oposto se a carga for negativa.";
-				else resultScreen.texto.text = "Lembre-se de que (1) o momento angular é definido pela regra da mão direita, (2) que os dois vetores são paralelos e (3) que o sentido deles é igual se a carga for positiva, e oposto se a carga for negativa.";
-			}else {
-				resultScreen.result.defaultTextFormat = formatoCerto;
-				resultScreen.result.text = "Você posicionou os vetores corretamente.";
-				resultScreen.texto.text = "Clique \"Novo exercício\" para iniciar um novo exercício";
+			if (screen.selectedInstance.ans1 == true && screen.selectedInstance.ans2 == true) {				
+				ai.container.messageBox("Parabéns! Você acertou.", null);	
 			}
+			if (screen.selectedInstance.ans1 == false) {				
+				if (screen.selectedInstance.ans2_oposto) {
+					ai.container.messageBox("O sentido do vetor momento agular está associado com o MOVIMENTO do carga pela regra da mão direita e nada tem a ver com sua carga elétrica.", null);	
+				} else {
+					ai.container.messageBox("O sentido do vetor momento angular é dado pela regra da mão direita. Tente novamente.", null);	
+				}
+			}
+			if (screen.selectedInstance.ans2 == false) {
+				if (screen.selectedInstance.ans2_oposto) {
+					if (!screen.selectedInstance.carga_positiva) {
+						ai.container.messageBox("Atenção para a carga elétrica: quando ela é negativa os vetores momento angular e momento de dipolo magnético são antiparalelos", null);	
+					} else {
+						ai.container.messageBox("Atenção para a carga elétrica: quando ela é positiva os vetores momento angular e momento de dipolo magnético são paralelos.", null);	
+					}
+				} else {
+					ai.container.messageBox("Os vetores momento angular e momento de dipolo magnético são sempre colineares. Veja a relação entre eles nas orientações.", null);		
+				}
+				
+				// ou
+				
+			}
+
 			
 			eval.addPlayInstance(play);
 		}
