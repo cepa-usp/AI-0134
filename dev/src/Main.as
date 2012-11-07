@@ -24,6 +24,7 @@ package
 	import flash.geom.Point;
 	import flash.geom.Rectangle;
 	import flash.text.TextFormat;
+	import flash.utils.getTimer;
 	import flash.utils.Timer;
 	import pipwerks.SCORM;
 	
@@ -51,7 +52,7 @@ package
 
 			
 			lyrMenu.addChild(menuBar);
-			menuBar.y = 479;
+			menuBar.y = 473;
 			menuBar.x = scrollRect.width/2
 			
 			ai.container.addChild(lyrMenu);
@@ -225,7 +226,7 @@ package
 			
 			
 			
-			
+			screen.ai = ai;
 			ai.container.addChild(screen);
 			screen.y = -20;
 			screen.camera.target = null;
@@ -297,10 +298,10 @@ package
 			
 				rotLeft = new RotLeft();
 				rotLeft.x = 3;
-				rotLeft.y = 370;
+				rotLeft.y = 363;
 				rotRight = new RotRight();
 				rotRight.x = scrollRect.width;
-				rotRight.y = 370;
+				rotRight.y = 363;
 				lyrMenu.addChild(rotLeft);
 				lyrMenu.addChild(rotRight);
 				

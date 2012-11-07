@@ -1,5 +1,6 @@
 package  
 {
+	import cepa.ai.AI;
 	import com.eclecticdesignstudio.motion.Actuate;
 	import com.eclecticdesignstudio.motion.easing.Linear;
 	import com.eclecticdesignstudio.motion.easing.Quad;
@@ -11,6 +12,7 @@ package
 	import flash.events.Event;
 	import flash.events.MouseEvent;
 	import flash.geom.Point;
+	import flash.utils.getTimer;
 	import org.ascollada.core.DaeInstanceController;
 	import org.papervision3d.cameras.CameraType;
 	import org.papervision3d.core.animation.channel.geometry.VertexChannel3D;
@@ -44,7 +46,7 @@ package
 		private var amntinstances:int = 10;
 		private var sprInstances:DisplayObject3D;
 		private var oldInstance:Instance;
-		
+		private var _ai:AI;
 		
 		private var sprfocus:DisplayObject3D = new DisplayObject3D("duente");
 		
@@ -143,7 +145,39 @@ package
 			var pt:Number3D = getCamerapoint(selectedInstance);
 			//Actuate.tween(camera, 3.1, { x:pt.sceneX, y:pt.sceneY, z:pt.sceneZ }, true).ease(Linear.easeNone).onComplete(sendComplete);
 			Actuate.tween(camera, 3, { x:pt.x, y:pt.y, z:pt.z }, true).ease(Linear.easeNone).onComplete(sendComplete);
+			startTimer();
 			Actuate.tween(sprfocus, 3, {x:selectedInstance.x, y:selectedInstance.y, z:selectedInstance.z}, true).onUpdate(look).ease(Quad.easeInOut);
+		}
+		
+		public function sendComplete():void {
+			selectedInstance.makeReady();
+			selectedInstance.resetRotation();
+			dispatchEvent(new Event(Event.COMPLETE));
+			var fps:Number = calculateTimer();
+			ai.debugScreen.msg("fps: " + fps);
+			if(fps<5.7) setAllInvisible();
+		}
+		
+		private var frames:int = 0;
+		private var start:int = getTimer();
+		public function startTimer():void {
+			stage.addEventListener(Event.ENTER_FRAME, onEnterFrame);
+		}
+		
+		public function onEnterFrame(e:Event):void {
+			frames++;
+		}
+		
+		/**
+		 * returns fps
+		 * @return
+		 */
+		public function calculateTimer():Number {
+			stage.removeEventListener(Event.ENTER_FRAME, onEnterFrame);
+			var end:int = getTimer();
+			var sec:Number = (end - start) / 1000
+			return Number(frames)/sec;
+			
 		}
 		
 		public function startExercise():void
@@ -181,15 +215,11 @@ package
 		}
 		
 		
-		public function sendComplete():void {
-			selectedInstance.makeReady();
-			selectedInstance.resetRotation();
-			dispatchEvent(new Event(Event.COMPLETE));
-			setAllInvisible();
-		}
+
 
 		
 		public function look():void {
+			
 			if (Math.sin(phi2) < 0) upVector = new Number3D(0, 0, -1);
 			else upVector = new Number3D(0, 0, 1);
 			
@@ -206,10 +236,21 @@ package
 			_selectedInstance = value;
 		}
 		
+		public function get ai():AI 
+		{
+			return _ai;
+		}
+		
+		public function set ai(value:AI):void 
+		{
+			_ai = value;
+		}
+		
 
 		public function setAllInvisible():void
 		{
-			return;
+			
+			//if(stage.frameRate<30) return;
 			for each (var item:Instance in instances) 
 			{
 				if (item != selectedInstance) item.visible = false;
