@@ -243,6 +243,7 @@ package
 			
 			//getNewExercise(null);
 			resetMenu();
+			onTutorialClick()
 			
 		}
 		

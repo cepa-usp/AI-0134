@@ -1,8 +1,5 @@
 Copying from /home/arthur/host/CEPA/github/AI-0134 to cepa@arquivos.atp.usp.br:/work/PUBLICACAO/atividades-interativas/AI-0134
 building file list ... done
-./
-AI-0134_PIF.zip
-swf/AI-0134.swf
 
-sent 12440 bytes  received 12281 bytes  49442.00 bytes/sec
-total size is 2644380  speedup is 106.97
+sent 374 bytes  received 12 bytes  772.00 bytes/sec
+total size is 2645647  speedup is 6854.01

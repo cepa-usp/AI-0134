@@ -87,7 +87,7 @@ package
 				displayAnswer = false;
 			}
 			seta1.scale = 1;
-			seta2.scale = 1;
+			seta2.scale = 1
 		}
 		
 		public function unReady():void {
@@ -143,7 +143,7 @@ package
 			Actuate.tween(seta1, 0.5, { scale:0 }, true);
 			Actuate.tween(seta2, 0.5, { scale:0 }, true);
 			
-			Actuate.tween(setaAnswer1, 0.5, { scale:0.9 }, true).delay(0.3);
+			Actuate.tween(setaAnswer1, 0.5, { scale:1 }, true).delay(0.3);
 			Actuate.tween(setaAnswer2, 0.5, { scale:1 }, true).delay(0.3);
 		}
 		
@@ -154,7 +154,7 @@ package
 			Actuate.tween(setaAnswer2, 0.5, { scale:0 }, true);
 			
 			Actuate.tween(seta1, 0.5, { scale:1 }, true).delay(0.3);
-			Actuate.tween(seta2, 0.5, { scale:0.95 }, true).delay(0.3);
+			Actuate.tween(seta2, 0.5, { scale:1 }, true).delay(0.3);
 		}
 		
 		public function resetRotation():void
@@ -170,12 +170,16 @@ package
 			seta1 = new Arrow(); //Momento angular (L)
 			addChild(seta1);
 			seta1.rotationX = 90;
+			
 			seta1.scale = 0;
 			
 			seta2 = new Arrow(0xFF0000); //Momento magnético (mi)
 			addChild(seta2);
 			seta2.rotationX = -90;
 			seta2.scale = 0;
+			
+			seta1.y -= 5;
+			seta2.y += 5;
 			
 			setaAnswer1 = new Arrow(); //Resposta momento angular
 			addChild(setaAnswer1);
@@ -193,6 +197,10 @@ package
 				else setaAnswer2.rotationX = ROTACAO_CIMA;
 			}
 			setaAnswer2.scale = 0;
+			
+			setaAnswer1.y -= 5;
+			setaAnswer2.y += 5;
+
 		}
 		
 		public function drawCameraPoints():void {
